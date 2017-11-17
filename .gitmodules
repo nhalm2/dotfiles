@@ -28,12 +28,15 @@
 [submodule "vim/bundle/vim-yaml"]
 	path = vim/bundle/vim-yaml
 	url = https://github.com/avakhov/vim-yaml
-[submodule "vim/bundle/salt-vim"]
-	path = vim/bundle/salt-vim
-	url = https://github.com/saltstack/salt-vim.git
 [submodule "vim/bundle/colorschemes"]
 	path = vim/bundle/colorschemes
 	url = https://github.com/flazz/vim-colorschemes.git
 [submodule "vim/bundle/syntastic"]
 	path = vim/bundle/syntastic
 	url = https://github.com/scrooloose/syntastic.git
+[submodule "vim/bundle/vim-terraform"]
+	path = vim/bundle/vim-terraform
+	url = https://github.com/hashivim/vim-terraform.git
+[submodule "vim/bundle/psql"]
+	path = vim/bundle/psql
+	url = https://github.com/lifepillar/pgsql.vim.git
