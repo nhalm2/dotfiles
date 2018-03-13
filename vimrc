@@ -87,3 +87,11 @@ autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
 let g:go_fmt_command = "goimports"
 
 """"
+
+"""terraform
+let g:terraform_align=1
+"""
+
+"""pgsql
+let g:sql_type_default = 'pgsql'
+"""
