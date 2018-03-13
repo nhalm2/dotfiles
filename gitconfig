@@ -1,0 +1,61 @@
+[user]
+#	email = nhalm@tredium.com
+#	name = Nick Halm
+
+[alias]
+	# reword the last commit
+	amend = commit -a --amend
+
+	# clean up all merged branches
+	# not named the first argument.
+	# if $1 not specified "master"
+	# branch is used
+	bclean = "!f() { git branch --merged ${1-dev} | grep -v " ${1-master}$" | xargs -r git branch -d; }; f"
+
+	# get the branch name
+	bn = "!git rev-parse --abbrev-ref HEAD"
+
+	# simplified check out
+	co = checkout
+
+	# create new branch
+	cob = checkout -b
+
+	# checkout the last tag
+	colasttag = "!f() { \
+		git fetch \
+		&& git co lasttag; \
+		}; f"
+
+	# List all aliases
+	la = "!git config -l | grep alias | cut -c 7-"
+
+	# show last tag
+	lasttag = describe --tags --abbrev=0
+
+	# simplified log showing changes within commits
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+
+	# simplified log result
+	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+
+	# show last tag
+	lt = describe --tags --abbrev=0
+
+	# merge branch into current
+	# if $1 not specified "dev"
+	# branch is used
+	mrgr = "!f() { \
+		CURRENT=$(git bn) \
+		&& git checkout ${1-dev} \
+		&& git pull origin ${1-dev} \
+		&& git co ${CURRENT} \
+		&& git merge ${1-dev}; \
+		}; f"
+
+	po = "!f() { \
+		CURRENT=$(git bn) \
+		&& git pull origin ${CURRENT}; \
+		}; f"
+
+	publish = "!git push -u origin $(git bn)"

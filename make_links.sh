@@ -20,6 +20,10 @@ echo "making .tmux.conf symlink"
 ln -s $(pwd)/tmux.conf $HOME/.tmux.conf
 
 echo 
-echo "adding bashrc functions and aliases"
+echo "adding bash functions and aliases"
 ln -s $(pwd)/bash_aliases $HOME/.bash_aliases
+
+echo 
+echo "adding gitconfig functions and aliases"
+ln -s $(pwd)/gitconfig $HOME/.gitconfig
 
