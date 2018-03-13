@@ -24,6 +24,9 @@ echo "adding bash functions and aliases"
 ln -s $(pwd)/bash_aliases $HOME/.bash_aliases
 
 echo 
-echo "adding gitconfig functions and aliases"
+echo "making .gitconfig symlink"
+if [ -e $HOME/.gitconfig ]; then
+	rm $HOME/.gitconfig
+fi
 ln -s $(pwd)/gitconfig $HOME/.gitconfig
 
