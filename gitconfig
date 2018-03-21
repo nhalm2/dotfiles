@@ -1,7 +1,3 @@
-[user]
-#	email = nhalm@tredium.com
-#	name = Nick Halm
-
 [alias]
 	# reword the last commit
 	amend = commit -a --amend
