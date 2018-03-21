@@ -1,5 +1,9 @@
 #!/bin/bash
 
+function __gcloud_exists {
+	if [ -eq 
+}
+
 function image {
 	echo "    Project: $(kubectl config current-context)"
 	if [ $# -eq 0 ]; then
@@ -47,5 +51,19 @@ function gcon {
 		gcloud container clusters get-credentials ${2} --zone ${zone} --project ${1}
 	else
 		gcloud container clusters get-credentials cluster-1 --zone ${zone} --project ${1}
+	fi
+}
+
+function __kube_ps1()
+{
+	if [ -e ${HOME}/.kube/config ]; then
+		# Get current context
+		CONTEXT=$(cat ${HOME}/.kube/config | grep "current-context:" | sed "s/current-context: //" | awk -F "_" '{ print $2 }' | sed  s/tredium-//g )
+
+		if [ -n "$CONTEXT" ]; then
+			echo "(k8s: ${CONTEXT})"
+		fi
+	else
+		echo ""
 	fi
 }
