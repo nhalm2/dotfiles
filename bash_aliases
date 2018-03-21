@@ -1,9 +1,5 @@
 #!/bin/bash
 
-function __gcloud_exists {
-	if [ -eq 
-}
-
 function image {
 	echo "    Project: $(kubectl config current-context)"
 	if [ $# -eq 0 ]; then
