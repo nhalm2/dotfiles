@@ -43,6 +43,14 @@ fi
 ln -s $(pwd)/gitconfig $HOME/.gitconfig
 
 echo 
+echo "making .psqlrc symlink"
+if [ -e $HOME/.psqlrc ] || [ -L $HOME/.psqlrc ]; then
+	echo "removing existing .psqlrc symlink"
+	rm $HOME/.psqlrc
+fi
+ln -s $(pwd)/psqlrc $HOME/.psqlrc
+
+echo 
 echo "adding bash functions and aliases"
 if [ -e $HOME/.bash_aliases ] || [ -L $HOME/.bash_aliases ]; then
 	echo "removing existing .bash_aliases symlink"
