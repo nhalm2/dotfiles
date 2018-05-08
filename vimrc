@@ -96,3 +96,10 @@ let g:terraform_align=1
 """pgsql
 let g:sql_type_default = 'pgsql'
 """
+
+"""NERDcommenter
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+" Remove trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+"""

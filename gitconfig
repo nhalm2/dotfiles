@@ -55,3 +55,6 @@
 		}; f"
 
 	publish = "!git push -u origin $(git bn)"
+[user]
+	email = nhalm@tredium.com
+	name = Nick Halm
