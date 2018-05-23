@@ -1,3 +1,7 @@
+# [user]
+#	email = nhalm@tredium.com
+#	name = Nick Halm
+
 [alias]
 	# reword the last commit
 	amend = commit -a --amend
@@ -55,6 +59,4 @@
 		}; f"
 
 	publish = "!git push -u origin $(git bn)"
-[user]
-	email = nhalm@tredium.com
-	name = Nick Halm
+
