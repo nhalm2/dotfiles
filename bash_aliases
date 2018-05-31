@@ -63,3 +63,13 @@ function __kube_ps1()
 		echo ""
 	fi
 }
+
+function run_pg()
+{
+	docker run -d -p 5432:5432 -v $HOME/sql:/mnt/startup -e POSTGRES_PASSWORD=password --name=${1:-postgres} docker.tredium.com/tredium/alpine-postgres:9.6.8
+}
+
+function restore_pg()
+{
+	pg_restore -h localhost -d nadb -U postgres -W -Fc < ${1:-nadb.dump}
+}
