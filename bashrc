@@ -121,3 +121,8 @@ BLUE="\[\033[01;34m\]"
 YELLOW="\[\e[1;33m\]"
 GREEN="\[\e[1;32m\]"
 
+# enable kubectl autocompletion
+# if installed
+if [[ $(which kubectl 2>&1) ]]; then
+	source <(kubectl completion bash)
+fi
