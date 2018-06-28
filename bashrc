@@ -61,7 +61,7 @@ YELLOW="\[\033[1;33m\]"
 GREEN="\[\033[1;32m\]"
 
 if [ "$color_prompt" = yes ]; then
-	PS1="${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]:${YELLOW}\$(__kube_ps1)${NORMAL}\n\$ "
+	PS1="${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]:${YELLOW}\$(__kube_ps1)${NORMAL}\n\$ "
 
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
