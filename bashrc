@@ -1,3 +1,4 @@
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -126,3 +127,18 @@ GREEN="\[\e[1;32m\]"
 if [[ $(which kubectl 2>&1) ]]; then
 	source <(kubectl completion bash)
 fi
+
+
+MY_SSH_AUTH_SOCK=${HOME}/.ssh/ssh_auth_sock
+
+__start_ssh_agent() {
+	eval $(ssh-agent) > /dev/null
+	ln -sf ${SSH_AUTH_SOCK} ${MY_SSH_AUTH_SOCK}
+	export SSH_AUTH_SOCK=${MY_SSH_AUTH_SOCK}
+	ssh-add > /dev/null || ssh-add
+}
+
+if [  ! -S ${MY_SSH_AUTH_SOCK} ]; then
+	__start_ssh_agent
+fi
+
