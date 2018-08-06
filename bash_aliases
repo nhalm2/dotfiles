@@ -42,12 +42,8 @@ function gport {
 
 function gcon {
 #connect to cluster-1 in given project. If parameter passed, use that cluster name instead of default cluster-1 (ie, internal-cluster in tredium-internal)
-	zone=$(gcloud compute instances list --project ${1} --filter="Name:util-1" --format='value(zone)')	
-	if [ $# -eq 2 ]; then
-		gcloud container clusters get-credentials ${2} --zone ${zone} --project ${1}
-	else
-		gcloud container clusters get-credentials cluster-1 --zone ${zone} --project ${1}
-	fi
+	zone=$(gcloud container clusters list --project ${1} | grep ${2:-cluster-1} | awk '{ print $2 }')
+	gcloud container clusters get-credentials ${2:-cluster-1} --zone ${zone} --project ${1}
 }
 
 function __kube_ps1()
@@ -70,10 +66,10 @@ function __kube_ps1()
 
 function run_pg()
 {
-	docker run -d -p 5432:5432 -v $HOME/sql:/mnt/startup -e POSTGRES_PASSWORD=password --name=${1:-postgres} docker.tredium.com/tredium/alpine-postgres:9.6.8
+	docker run -d -p ${2:-5432}:5432 -v $HOME/sql:/mnt/startup -e POSTGRES_PASSWORD=password --name=${1:-postgres} docker.tredium.com/tredium/alpine-postgres:9.6.8
 }
 
 function restore_pg()
 {
-	pg_restore -h localhost -d nadb -U postgres -W -Fc < ${1:-nadb.dump}
+	pg_restore -h localhost -d nadb -U postgres -p ${2:-5432} -W -Fc < ${1:-nadb.dump}
 }
