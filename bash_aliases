@@ -26,22 +26,41 @@ function gssh {
 function gscp {
 #connect to util-1 server of project you pass in
 #eg. gssh tredium-scl-pharm-ltc
-        ssh-add ~/.ssh/google_compute_engine
+	echo ""
+	echo "DEPREACTED - use 'gpull' instead"
+	echo ""
+
 	zone=$(gcloud compute instances list --project ${1} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
         gcloud compute scp --zone ${zone} --project $1 util-1:${2} ${3}
 }
 
+function gpull {
+#connect to util-1 server of project you pass in
+#eg. gssh tredium-scl-pharm-ltc
+	zone=$(gcloud compute instances list --project ${1} --filter="Name:util-1" --format='value(zone)')
+	echo "util-1 zone: ${zone}"
+        gcloud compute scp --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project $1 util-1:${2} ${3}
+}
+
+function gpush {
+	zone=$(gcloud compute instances list --project ${1} --filter="Name:util-1" --format='value(zone)')
+	echo "util-1 zone: ${zone}"
+        gcloud compute scp --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project $1 ${2} util-1:${3}
+}
+
 function gport {
-#connect to util-1 server of project you pass in, and setup port forward you set in second parameter
-#eg gport tredium-scl-pharm-ltc "5432:pgpool:5432"
-	ssh-add ~/.ssh/google_compute_engine
+# gport tredium-tdm=pharm-test 5432:db-prod-1:5432
+
 	zone=$(gcloud compute instances list --project ${1} --filter="Name:util-1" --format='value(zone  )')
-	gcloud compute ssh --zone ${zone} --project $1 util-1 --ssh-flag='-A' --ssh-flag='-L' --ssh-flag="$2"
+	gcloud compute ssh --zone ${zone} --project $1 util-1 --ssh-flag='-A' --ssh-flag='-L' --ssh-flag="$2" 
 }
 
 function gcon {
 #connect to cluster-1 in given project. If parameter passed, use that cluster name instead of default cluster-1 (ie, internal-cluster in tredium-internal)
+# gcon tredium-tdm-pharm-test
+# gcon tredium-tdm-pharm-test cluster-name
+
 	zone=$(gcloud container clusters list --project ${1} | grep ${2:-cluster-1} | awk '{ print $2 }')
 	gcloud container clusters get-credentials ${2:-cluster-1} --zone ${zone} --project ${1}
 }
