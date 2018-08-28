@@ -102,4 +102,9 @@ let g:sql_type_default = 'pgsql'
 let g:NERDSpaceDelims = 1
 " Remove trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
+
+"""vim-mix-formatter
+"Will turn on auto formatting
+" let g:mix_format_on_save = 1
+
 """
