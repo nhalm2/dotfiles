@@ -46,3 +46,6 @@
 [submodule "vim/bundle/alchemist.vim"]
 	path = vim/bundle/alchemist.vim
 	url = https://github.com/slashmili/alchemist.vim.git
+[submodule "vim/bundle/vim-mix-format"]
+	path = vim/bundle/vim-mix-format
+	url = https://github.com/mhinz/vim-mix-format
