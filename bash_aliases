@@ -115,7 +115,7 @@ function get_claim_from_cfid()
 {
 	fname=clm.json
 
-	sql=$(car <<- EOF
+	sql=$(cat <<- EOF
 	SELECT str_value
 	FROM sclaim.claim_field
 	WHERE field_num = 'raw_request'
