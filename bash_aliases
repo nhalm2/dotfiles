@@ -40,13 +40,13 @@ function gpull {
 #eg. gssh tredium-scl-pharm-ltc
 	zone=$(gcloud compute instances list --project ${1} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
-        gcloud compute scp --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project $1 util-1:${2} ${3}
+        gcloud compute scp --compress --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project $1 util-1:${2} ${3}
 }
 
 function gpush {
 	zone=$(gcloud compute instances list --project ${1} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
-        gcloud compute scp --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project $1 ${2} util-1:${3}
+        gcloud compute scp --compress --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project $1 ${2} util-1:${3}
 }
 
 function gport {
@@ -91,4 +91,51 @@ function run_pg()
 function restore_pg()
 {
 	pg_restore -h localhost -d nadb -U postgres -p ${2:-5432} -W -Fc < ${1:-nadb.dump}
+}
+
+function get_claim_from_auth()
+{
+	fname=clm.json
+
+	sql=$(cat  <<- EOF
+	SELECT str_value FROM sclaim.claim_field
+	WHERE field_num = 'raw_request' AND
+	claim_field_id = (
+		SELECT claim_field_id FROM sclaim.completed_claim
+		WHERE auth_num = '${1}'
+		)
+	EOF
+	)
+
+	psql -q -c "\copy (${sql}) to ${fname};"
+	ncpdp_to_json $fname
+}
+
+function get_claim_from_cfid()
+{
+	fname=clm.json
+
+	sql=$(car <<- EOF
+	SELECT str_value
+	FROM sclaim.claim_field
+	WHERE field_num = 'raw_request'
+	AND claim_field_id = ${1}
+	EOF
+	)
+
+	psql -q -c "\copy (${sql}) to ${fname};"
+	ncpdp_to_json $fname
+}
+
+function ncpdp_to_json()
+{
+	if [[ -s ${1} ]]; then
+		filename=${1%%.*}
+		ext=${1##*.}
+
+		sed -i.bak 's/^/{"transactionid":"aaaa","contents":"/;s/$/"}/' ${1}
+		sed 's/B1/B2/' ${1} > ${filename}_r.${ext}
+	else
+		echo ${1} is empty
+	fi
 }
