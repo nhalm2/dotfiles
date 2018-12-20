@@ -10,9 +10,10 @@ set encoding=utf-8
 "colorscheme wombat
 syntax enable
 set background=dark
-"colorscheme solarized
+" colorscheme solarized
 colorscheme gruvbox
-"let g:solarized_termcolors=256
+" colorschem molokai
+" let g:solarized_termcolors=256
 
 """" vim-airline config
 

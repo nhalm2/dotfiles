@@ -1,5 +1,11 @@
 #!/bin/bash
 
+###################
+#                 #
+# Kubectl Helpers #
+#                 #
+###################
+
 function image {
 	echo "    Project: $(kubectl config current-context)"
 	if [ $# -eq 0 ]; then
@@ -83,6 +89,12 @@ function __kube_ps1()
 	fi
 }
 
+################
+#              #
+# PSQL Helpers #
+#              #
+################
+
 function run_pg()
 {
 	docker run -d -p ${2:-5432}:5432 -v $HOME/sql:/mnt/startup -e POSTGRES_PASSWORD=password --name=${1:-postgres} docker.tredium.com/tredium/alpine-postgres:9.6.8
@@ -127,6 +139,12 @@ function get_claim_from_cfid()
 	ncpdp_to_json $fname
 }
 
+##################
+#                #
+# Elixir Helpers #
+#                #
+##################
+
 function ncpdp_to_json()
 {
 	if [[ -s ${1} ]]; then
@@ -138,4 +156,17 @@ function ncpdp_to_json()
 	else
 		echo ${1} is empty
 	fi
+}
+
+function send_claim()
+{
+	curl -d @${1} localhost:8080/claim/adjudicate
+}
+
+function mix_compile_warning_files()
+{
+	if [[ ! -p cmprslt ]]; then
+		mkfifo cmprslt
+	fi
+	mix do clean, compile &> cmprslt | grep "${1}" cmprslt
 }
