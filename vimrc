@@ -1,6 +1,33 @@
-runtime bundle/vim-pathogen/autoload/pathogen.vim
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+  	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
-execute pathogen#infect()
+call plug#begin('~/.vim/plugged')
+
+Plug 'tpope/vim-sensible'
+Plug 'elixir-lang/vim-elixir'
+" Plug 'fatih/vim-go'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'powerline/fonts'
+Plug 'avakhov/vim-yaml'
+Plug 'flazz/vim-colorschemes'
+Plug 'scrooloose/syntastic'
+Plug 'hashivim/vim-terraform'
+Plug 'lifepillar/pgsql.vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'slashmili/alchemist.vim'
+Plug 'mhinz/vim-mix-format'
+
+call plug#end()
+
+" runtime ~/.vim/bundle/vim-pathogen/autoload/pathogen.vim
+
+" execute pathogen#infect()
 syntax on
 filetype plugin indent on
 
@@ -13,6 +40,7 @@ set background=dark
 " colorscheme solarized
 colorscheme gruvbox
 " colorschem molokai
+set t_Co=256
 " let g:solarized_termcolors=256
 
 """" vim-airline config
@@ -55,7 +83,6 @@ endfunction
 
 autocmd VimEnter * call AirlineInit()
 
-set t_Co=256
 """"
 
 """" git-gutter config

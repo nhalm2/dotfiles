@@ -6,6 +6,7 @@ echo "making the necesary symlinks"
 echo
 echo "making .vim symlink"
 if [ -d $HOME/.vim ] || [ -L $HOME/.vim ]; then
+	echo "removing existing .vim/ symlink"
 	rm -rf $HOME/.vim
 fi
 ln -s $(pwd)/vim $HOME/.vim
@@ -57,4 +58,12 @@ if [ -e $HOME/.bash_aliases ] || [ -L $HOME/.bash_aliases ]; then
 	rm $HOME/.bash_aliases
 fi
 ln -s $(pwd)/bash_aliases $HOME/.bash_aliases
+
+echo
+echo "making .tmux symlink"
+if [ -d $HOME/.tmux ] || [ -L $HOME/.tmux ]; then
+	echo "removing existing .tmux/ symlink"
+	rm -rf $HOME/.tmux
+fi
+ln -s $(pwd)/tmux $HOME/.tmux
 
