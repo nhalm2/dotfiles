@@ -1,6 +1,6 @@
- [user]
-	email = nhalm@tredium.com
-	name = Nick Halm
+#[user]
+#	email = nhalm@tredium.com
+#	name = Nick Halm
 
 [alias]
 	# reword the last commit
