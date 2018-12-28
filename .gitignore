@@ -1,3 +1,5 @@
 .netrwhist
 /vim/*
 !vim/autoload
+/tmux/*
+!/tmux/plugins/tpm
