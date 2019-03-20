@@ -23,10 +23,12 @@ function showpod {
 function gssh {
 #connect to util-1 server of project you pass in
 #eg. gssh tredium-scl-pharm-ltc
+	#get project id:
+	PROJ_ID=$(gcloud projects list | grep ${1} | awk '{ print $1 }')
         ssh-add ~/.ssh/google_compute_engine
-	zone=$(gcloud compute instances list --project ${1} --filter="Name:util-1" --format='value(zone)')
+	zone=$(gcloud compute instances list --project ${PROJ_ID} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
-        gcloud compute ssh --zone ${zone} --project $1 util-1 --ssh-flag='-A'
+        gcloud compute ssh --zone ${zone} --project ${PROJ_ID} util-1 --ssh-flag='-A'
 }
 
 function gscp {
@@ -35,31 +37,41 @@ function gscp {
 	echo ""
 	echo "DEPREACTED - use 'gpull' instead"
 	echo ""
+	#get project id:
+	PROJ_ID=$(gcloud projects list | grep ${1} | awk '{ print $1 }')
 
-	zone=$(gcloud compute instances list --project ${1} --filter="Name:util-1" --format='value(zone)')
+	zone=$(gcloud compute instances list --project ${PROJ_ID} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
-        gcloud compute scp --zone ${zone} --project $1 util-1:${2} ${3}
+        gcloud compute scp --zone ${zone} --project ${PROJ_ID} util-1:${2} ${3}
 }
 
 function gpull {
 #connect to util-1 server of project you pass in
 #eg. gssh tredium-scl-pharm-ltc
-	zone=$(gcloud compute instances list --project ${1} --filter="Name:util-1" --format='value(zone)')
+	#get project id:
+	PROJ_ID=$(gcloud projects list | grep ${1} | awk '{ print $1 }')
+
+	zone=$(gcloud compute instances list --project ${PROJ_ID} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
-        gcloud compute scp --compress --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project $1 util-1:${2} ${3}
+        gcloud compute scp --compress --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project ${PROJ_ID} util-1:${2} ${3}
 }
 
 function gpush {
-	zone=$(gcloud compute instances list --project ${1} --filter="Name:util-1" --format='value(zone)')
+	#get project id:
+	PROJ_ID=$(gcloud projects list | grep ${1} | awk '{ print $1 }')
+
+	zone=$(gcloud compute instances list --project ${PROJ_ID} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
-        gcloud compute scp --compress --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project $1 ${2} util-1:${3}
+        gcloud compute scp --compress --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project ${PROJ_ID} ${2} util-1:${3}
 }
 
 function gport {
 # gport tredium-tdm=pharm-test 5432:db-prod-1:5432
+	#get project id:
+	PROJ_ID=$(gcloud projects list | grep ${1} | awk '{ print $1 }')
 
-	zone=$(gcloud compute instances list --project ${1} --filter="Name:util-1" --format='value(zone  )')
-	gcloud compute ssh --zone ${zone} --project $1 util-1 --ssh-flag='-A' --ssh-flag='-L' --ssh-flag="$2" 
+	zone=$(gcloud compute instances list --project ${PROJ_ID} --filter="Name:util-1" --format='value(zone  )')
+	gcloud compute ssh --zone ${zone} --project ${PROJ_ID} util-1 --ssh-flag='-A' --ssh-flag='-L' --ssh-flag="$2" 
 }
 
 function gcon {
@@ -67,8 +79,11 @@ function gcon {
 # gcon tredium-tdm-pharm-test
 # gcon tredium-tdm-pharm-test cluster-name
 
-	zone=$(gcloud container clusters list --project ${1} | grep ${2:-cluster-1} | awk '{ print $2 }')
-	gcloud container clusters get-credentials ${2:-cluster-1} --zone ${zone} --project ${1}
+	#get project id:
+	PROJ_ID=$(gcloud projects list | grep ${1} | awk '{ print $1 }')
+
+	zone=$(gcloud container clusters list --project ${PROJ_ID} | grep ${2:-cluster-1} | awk '{ print $2 }')
+	gcloud container clusters get-credentials ${2:-cluster-1} --zone ${zone} --project ${PROJ_ID}
 }
 
 # $1 is kind (User, Group, ServiceAccount)
@@ -124,7 +139,7 @@ function __kube_ps1()
 
 function run_pg()
 {
-	docker run -d -p ${2:-5432}:5432 -v $HOME/sql:/mnt/startup -e POSTGRES_PASSWORD=password --name=${1:-postgres} us.gcr.io/tredium-internal/alpine-postgres:9.6.8
+	docker run -d -p ${2:-5432}:5432 -v $HOME/sql:/mnt/startup -e POSTGRES_PASSWORD=password --name=${1:-postgres} docker.tredium.com/tredium/alpine-postgres:9.6.8
 }
 
 function restore_pg()
