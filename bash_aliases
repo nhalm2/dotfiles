@@ -25,10 +25,12 @@ function gssh {
 #eg. gssh tredium-scl-pharm-ltc
 	#get project id:
 	PROJ_ID=$(gcloud projects list | grep " ${1} " | awk '{ print $1 }')
+	#default to util-1 if not passed in
+	SERVER=${2:-util-1}
         ssh-add ~/.ssh/google_compute_engine
 	zone=$(gcloud compute instances list --project ${PROJ_ID} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
-        gcloud compute ssh --zone ${zone} --project ${PROJ_ID} util-1 --ssh-flag='-A'
+        gcloud compute ssh --zone ${zone} --project ${PROJ_ID} ${SERVER} --ssh-flag='-A'
 }
 
 function gscp {
