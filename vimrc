@@ -8,7 +8,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'tpope/vim-sensible'
 Plug 'elixir-lang/vim-elixir'
-" Plug 'fatih/vim-go'
+Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-fugitive'

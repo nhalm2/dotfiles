@@ -53,7 +53,7 @@ function gpull {
 
 	zone=$(gcloud compute instances list --project ${PROJ_ID} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
-        gcloud compute scp --compress --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project ${PROJ_ID} util-1:${2} ${3}
+        gcloud compute scp --recurse --compress --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project ${PROJ_ID} util-1:${2} ${3}
 }
 
 function gpush {
@@ -62,7 +62,7 @@ function gpush {
 
 	zone=$(gcloud compute instances list --project ${PROJ_ID} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
-        gcloud compute scp --compress --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project ${PROJ_ID} ${2} util-1:${3}
+        gcloud compute scp --recurse --compress --scp-flag='-o' --scp-flag='ForwardAgent yes' --zone ${zone} --project ${PROJ_ID} ${2} util-1:${3}
 }
 
 function gport {
@@ -82,8 +82,13 @@ function gcon {
 	#get project id:
 	PROJ_ID=$(gcloud projects list | grep ${1} | awk '{ print $1 }')
 
-	zone=$(gcloud container clusters list --project ${PROJ_ID} | grep ${2:-cluster-1} | awk '{ print $2 }')
-	gcloud container clusters get-credentials ${2:-cluster-1} --zone ${zone} --project ${PROJ_ID}
+	# almost always the cluster name is cluster-1
+	# but in tredium-internal it is named internal-cluster
+	# so we need to match on one or the other.
+	line=$(gcloud container clusters list --project ${PROJ_ID} | egrep "(${2:-cluster-1}|internal-cluster)")
+	cluster=$(echo ${line} | awk '{ print $1 }')
+	zone=$(echo ${line} | awk '{ print $2}')
+	gcloud container clusters get-credentials ${cluster:-cluster-1} --zone ${zone} --project ${PROJ_ID}
 }
 
 # $1 is kind (User, Group, ServiceAccount)
@@ -205,6 +210,19 @@ function send_claim()
 	curl -d @${1} localhost:8080/claim/adjudicate
 }
 
+function check_out_elixir_dir()
+{
+	p=~/dev/${1}
+
+	mkdir -p ${p} && \
+		cd ${p} && \
+		git clone git@gt:pharmsys/na && \
+		cd na/apps/na_adj && \
+		git cob ${1} dev && \
+		mix deps.get && \
+		mix prepare
+}
+
 function mix_compile_warning_files()
 {
 	if [[ ! -p cmprslt ]]; then
@@ -212,3 +230,5 @@ function mix_compile_warning_files()
 	fi
 	mix do clean, compile &> cmprslt | grep "${1}" cmprslt
 }
+
+
