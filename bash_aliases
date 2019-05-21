@@ -24,7 +24,7 @@ function gssh {
 #connect to util-1 server of project you pass in
 #eg. gssh tredium-scl-pharm-ltc
 	#get project id:
-	PROJ_ID=$(gcloud projects list | grep ${1} | awk '{ print $1 }')
+	PROJ_ID=$(gcloud projects list | grep " ${1} " | awk '{ print $1 }')
         ssh-add ~/.ssh/google_compute_engine
 	zone=$(gcloud compute instances list --project ${PROJ_ID} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
@@ -38,7 +38,7 @@ function gscp {
 	echo "DEPREACTED - use 'gpull' instead"
 	echo ""
 	#get project id:
-	PROJ_ID=$(gcloud projects list | grep ${1} | awk '{ print $1 }')
+	PROJ_ID=$(gcloud projects list | grep " ${1} " | awk '{ print $1 }')
 
 	zone=$(gcloud compute instances list --project ${PROJ_ID} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
@@ -49,7 +49,7 @@ function gpull {
 #connect to util-1 server of project you pass in
 #eg. gssh tredium-scl-pharm-ltc
 	#get project id:
-	PROJ_ID=$(gcloud projects list | grep ${1} | awk '{ print $1 }')
+	PROJ_ID=$(gcloud projects list | grep " ${1} " | awk '{ print $1 }')
 
 	zone=$(gcloud compute instances list --project ${PROJ_ID} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
@@ -58,7 +58,7 @@ function gpull {
 
 function gpush {
 	#get project id:
-	PROJ_ID=$(gcloud projects list | grep ${1} | awk '{ print $1 }')
+	PROJ_ID=$(gcloud projects list | grep " ${1} " | awk '{ print $1 }')
 
 	zone=$(gcloud compute instances list --project ${PROJ_ID} --filter="Name:util-1" --format='value(zone)')
 	echo "util-1 zone: ${zone}"
@@ -68,7 +68,7 @@ function gpush {
 function gport {
 # gport tredium-tdm=pharm-test 5432:db-prod-1:5432
 	#get project id:
-	PROJ_ID=$(gcloud projects list | grep ${1} | awk '{ print $1 }')
+	PROJ_ID=$(gcloud projects list | grep " ${1} " | awk '{ print $1 }')
 
 	zone=$(gcloud compute instances list --project ${PROJ_ID} --filter="Name:util-1" --format='value(zone  )')
 	gcloud compute ssh --zone ${zone} --project ${PROJ_ID} util-1 --ssh-flag='-A' --ssh-flag='-L' --ssh-flag="$2" 
@@ -80,7 +80,7 @@ function gcon {
 # gcon tredium-tdm-pharm-test cluster-name
 
 	#get project id:
-	PROJ_ID=$(gcloud projects list | grep ${1} | awk '{ print $1 }')
+	PROJ_ID=$(gcloud projects list | grep " ${1} " | awk '{ print $1 }')
 
 	# almost always the cluster name is cluster-1
 	# but in tredium-internal it is named internal-cluster
