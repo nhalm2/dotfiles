@@ -201,7 +201,7 @@ function ncpdp_to_json()
 		filename=${1%%.*}
 		ext=${1##*.}
 
-		sed -i.bak 's/^/{"transactionid":"aaaa","contents":"/;s/$/"}/' ${1}
+		sed -i.bak 's/^/{"arguments":{"trial_only":"true","user_id":"1"},"transactionid":"aaaa","contents":"/;s/$/"}/' ${1}
 		sed 's/B1/B2/' ${1} > ${filename}_r.${ext}
 	else
 		echo ${1} is empty
