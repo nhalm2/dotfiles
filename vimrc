@@ -136,3 +136,5 @@ let g:NERDTrimTrailingWhitespace = 1
 let g:mix_format_on_save = 1
 
 """
+"""SA-791 - disable warning
+let g:go_version_warning = 0
