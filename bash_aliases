@@ -189,6 +189,36 @@ function get_claim_from_cfid()
 	ncpdp_to_json $fname
 }
 
+#################
+# MYSQL HELPERS #
+#################
+
+function start_sezzle_db()
+{
+	docker run -d -p 3306:3306 \
+		-e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
+		-e MYSQL_ROOT_HOST='%' \
+		-e MYSQL_USER=sezzle \
+		-e MYSQL_DATABASE=sezzle \
+		-e MYSQL_PASSWORD=Testing123 \
+		--name=mysql-sez \
+		mysql-nick:latest
+}
+
+function restart_sezzle_db()
+{
+	docker rm -fv mysql-sez
+	start_sezzle_db
+}
+
+function mysql_s() {
+	docker run --rm \
+		-it \
+		--network=host \
+		mysql-nick \
+		mysql -u sezzle -D sezzle -p${MYSQL_PASSWORD}
+}
+
 ##################
 #                #
 # Elixir Helpers #
@@ -225,13 +255,4 @@ function check_out_elixir_dir()
 		mix deps.get && \
 		mix prepare
 }
-
-function mix_compile_warning_files()
-{
-	if [[ ! -p cmprslt ]]; then
-		mkfifo cmprslt
-	fi
-	mix do clean, compile &> cmprslt | grep "${1}" cmprslt
-}
-
 

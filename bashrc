@@ -142,3 +142,8 @@ if [  ! -S ${MY_SSH_AUTH_SOCK} ]; then
 	__start_ssh_agent
 fi
 export SSH_AUTH_SOCK=${MY_SSH_AUTH_SOCK}
+
+if type nvim > /dev/null 2>&1; then
+	alias vi='nvim'
+	alias vim='nvim'
+fi
