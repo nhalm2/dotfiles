@@ -122,5 +122,4 @@ function _mac() {
 	_install_node
 }
 
-# _setup_platform
-_install_docker_brew
+_setup_platform
