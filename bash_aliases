@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ###################
 #                 #
@@ -256,3 +256,23 @@ function check_out_elixir_dir()
 		mix prepare
 }
 
+#################
+#               #
+# Miscellaneous #
+#               #
+#################
+
+function get_platform()
+{
+	local unameOut="$(uname -s)"
+	local maching="UNKNOWN"
+
+	case "${unameOut}" in
+	    Linux*)     machine=Linux;;
+	    Darwin*)    machine=Mac;;
+	    CYGWIN*)    machine=Cygwin;;
+	    MINGW*)     machine=MinGw;;
+	    *)          machine="UNKNOWN:${unameOut}"
+	esac
+	echo ${machine}
+}

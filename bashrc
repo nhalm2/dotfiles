@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
@@ -9,6 +10,28 @@ case $- in
       *) return;;
 esac
 
+function _get_platform()
+{
+	local unameOut="$(uname -s)"
+	local maching="UNKNOWN"
+
+	case "${unameOut}" in
+	    Linux*)     machine=Linux;;
+	    Darwin*)    machine=Mac;;
+	    CYGWIN*)    machine=Cygwin;;
+	    MINGW*)     machine=MinGw;;
+	    *)          machine="UNKNOWN:${unameOut}"
+	esac
+	echo ${machine}
+}
+
+PLATFORM=$(_get_platform)
+
+if [ ${PLATFORM} == "Mac" ]; then
+	#For compilers to find gettext you may need to set:
+	export LDFLAGS="-L/usr/local/opt/gettext/lib"
+	export CPPFLAGS="-I/usr/local/opt/gettext/include"
+fi
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth

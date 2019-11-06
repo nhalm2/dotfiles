@@ -1,15 +1,24 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 
 echo "making the necesary symlinks"
 
 echo
-echo "making .vim symlink"
-if [ -d $HOME/.vim ] || [ -L $HOME/.vim ]; then
+if [ -L $HOME/.bash_profile ]; then
 	echo "removing existing .vim/ symlink"
 	rm -rf $HOME/.vim
 fi
-ln -s $(pwd)/vim $HOME/.vim
+if [ ! -r ${HOME}/.bash_profile ]; then
+	echo "making .bash_profile symlink"
+	ln -s $(pwd)/bash_profile $HOME/.bash_profile
+fi
+
+# echo
+# echo "making .vim symlink"
+# if [ -d $HOME/.vim ] || [ -L $HOME/.vim ]; then
+	# echo "removing existing .vim/ symlink"
+	# rm -rf $HOME/.vim
+# fi
+# ln -s $(pwd)/vim $HOME/.vim
 
 echo
 echo "making .vimrc symlink"
@@ -18,6 +27,15 @@ if [ -e $HOME/.vimrc ] || [ -L $HOME/.vimrc ]; then
 	rm $HOME/.vimrc
 fi
 ln -s $(pwd)/vimrc $HOME/.vimrc
+
+echo
+echo "making .config/neovim/init.conf symlink"
+mkdir -p $HOME/.config/nvim
+if [ -e $HOME/.config/init.vim ] || [ -L $HOME/.config/nvim/init.vim ]; then
+	echo "removing existing .config/nvim/init.vim symlink"
+	rm $HOME/.config/nvim/init.vim
+fi
+ln -s $(pwd)/vimrc $HOME/.config/nvim/init.vim
 
 echo
 echo "making .tmux.conf symlink"
