@@ -202,7 +202,7 @@ function start_sezzle_db()
 		-e MYSQL_DATABASE=sezzle \
 		-e MYSQL_PASSWORD=Testing123 \
 		--name=mysql-sez \
-		mysql-nick:latest
+		mysql:latest
 }
 
 function restart_sezzle_db()
@@ -215,8 +215,8 @@ function mysql_s() {
 	docker run --rm \
 		-it \
 		--network=host \
-		mysql-nick \
-		mysql -u sezzle -D sezzle -p${MYSQL_PASSWORD}
+		mysql:latest \
+		mysql -u sezzle -D sezzle --protocol=tcp -p${MYSQL_PASSWORD}
 }
 
 ##################

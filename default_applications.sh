@@ -37,6 +37,32 @@ function _install_brew() {
 	fi
 }
 
+function _install_node() {
+	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+}
+
+function _install_vs_code_brew() {
+	brew cask install visual-studio-code
+	xattr -r -d com.apple.quarantine '/Applications/Visual Studio Code.app'
+
+	code --install-extension ms-vscode.go \
+		dbaeumer.vscode-eslint \
+		ms-vscode.vscode-typescript-tslint-plugin \
+		shinnn.stylelint \
+		editorconfig.editorconfig \
+		ivory-lab.jenkinsfile-support \
+		neilding.language-liquid \
+		william-voyek.vscode-nginx \
+		ms-azuretools.vscode-docker
+
+}
+
+function _install_docker_brew() {
+	brew cask install docker
+	xattr -r -d com.apple.quarantine '/Applications/Docker.app'
+	ln -s /Applications/Docker.app/Contents/Resources/bin/docker /usr/local/bin/
+}
+
 function _mac() {
 	_install_brew
 
@@ -67,32 +93,34 @@ function _mac() {
 
 
 	# Install other useful binaries.
-	brew install neovim
-	brew install git
-	brew install ack
-	#brew install exiv2
-	brew install git
-	brew install git-lfs
-	brew install gs
-	brew install lua
-	brew install lynx
-	brew install p7zip
-	brew install pigz
-	brew install pv
-	brew install rename
-	brew install rlwrap
-	brew install ssh-copy-id
-	brew install tree
-	brew install vbindiff
-	brew install zopfli
-	brew install tmux
-	brew install openssh
-	brew install grep
+	brew install neovim /
+		git /
+		ack /
+		git /
+		git-lfs /
+		gs /
+		lua /
+		lynx /
+		p7zip /
+		pigz /
+		pv /
+		rename /
+		rlwrap /
+		ssh-copy-id /
+		tree /
+		vbindiff /
+		zopfli /
+		tmux /
+		openssh /
+		grep /
+		golang /
 
-	brew cask install visual-studio-code
-
+	_install_vs_code_brew
 	# Remove outdated versions from the cellar.
 	brew cleanup	
+
+	_install_node
 }
 
-_setup_platform
+# _setup_platform
+_install_docker_brew

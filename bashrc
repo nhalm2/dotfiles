@@ -26,11 +26,22 @@ function _get_platform()
 }
 
 PLATFORM=$(_get_platform)
+GOPATH=$HOME/go
+
+export PATH=$PATH:$GOPATH/bin
+echo $GOPATH
+if [ ! -d $GOPATH ]; then
+	echo "ADFAS"
+	mkdir -p $GOPATH/src
+	mkdir -p $GOPATH/bin
+fi
 
 if [ ${PLATFORM} == "Mac" ]; then
 	#For compilers to find gettext you may need to set:
 	export LDFLAGS="-L/usr/local/opt/gettext/lib"
 	export CPPFLAGS="-I/usr/local/opt/gettext/include"
+
+
 fi
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
@@ -170,3 +181,7 @@ if type nvim > /dev/null 2>&1; then
 	alias vi='nvim'
 	alias vim='nvim'
 fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
