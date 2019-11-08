@@ -113,6 +113,7 @@ function _mac() {
 	brew install openssh
 	brew install grep
 	brew install golang
+	brew cask install sequel-pro
 
 	_install_vs_code_brew
 	_install_docker_brew

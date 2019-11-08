@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+MYSQL_VERSION=5.6
+
 ###################
 #                 #
 # Kubectl Helpers #
@@ -202,7 +204,7 @@ function start_sezzle_db()
 		-e MYSQL_DATABASE=sezzle \
 		-e MYSQL_PASSWORD=Testing123 \
 		--name=mysql-sez \
-		mysql:latest
+		mysql:${MYSQL_VERSION}
 }
 
 function restart_sezzle_db()
