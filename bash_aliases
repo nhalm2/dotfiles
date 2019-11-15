@@ -203,8 +203,29 @@ function start_sezzle_db()
 		-e MYSQL_USER=sezzle \
 		-e MYSQL_DATABASE=sezzle \
 		-e MYSQL_PASSWORD=Testing123 \
-		--name=mysql-sez \
+		--name=mysql-2 \
 		mysql:${MYSQL_VERSION}
+}
+
+function start_sezzle_db2()
+{
+	local mount_dir=$HOME/mysql_mnt
+
+	if [ ! -d $mount_dir ]; then
+		mkdir $mount_dir
+	fi
+
+	cmd='echo "CREATE DATABASE IF NOT EXISTS sezzle; CREATE DATABASE IF NOT EXISTS product_events; GRANT ALL ON \`product_events\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`sezzle\`.* TO '\''sezzle'\''@'\''%'\'';" > /docker-entrypoint-initdb.d/init.sql; /usr/local/bin/docker-entrypoint.sh mysqld'
+
+	docker run -d -p 3306:3306 \
+		-e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
+		-e MYSQL_ROOT_HOST='%' \
+		-e MYSQL_USER=sezzle \
+		-e MYSQL_PASSWORD=Testing123 \
+		--mount type=bind,source="${mount_dir}",target=/var/lib/mysql:,consistency=delegated \
+		--name=mysql-sez \
+		mysql:${MYSQL_VERSION} \
+		/bin/sh -c "${cmd}"
 }
 
 function restart_sezzle_db()
@@ -217,8 +238,39 @@ function mysql_s() {
 	docker run --rm \
 		-it \
 		--network=host \
-		mysql:latest \
+		mysql:${MYSQL_VERSION} \
 		mysql -u sezzle -D sezzle --protocol=tcp -p${MYSQL_PASSWORD}
+}
+
+function mysql_s2() {
+	docker run --rm \
+		-it \
+		--network=host \
+		mysql:${MYSQL_VERSION} \
+		mysql -u sezzle -D sezzle -P 3307  --protocol=tcp -p${MYSQL_PASSWORD}
+}
+
+function mysql_dump() {
+	local this_host=${MYSQL_HOST:=localhost}
+	local this_username=${MYSQL_USER:=sezzle}
+	local args="--lock-tables=false $@"
+
+	echo ${this_host}
+	echo ${this_username}
+
+	docker run --rm \
+		-it \
+		--network=host \
+		-v $(pwd):/dump \
+		mysql:${MYSQL_VERSION} \
+		/bin/bash -c "mysqldump -h${this_host} -u ${this_username} --protocol=tcp -p${MYSQL_PASSWORD} ${args} > /dump/dump_out.sql"
+}
+
+function mysql_retore() {
+	docker exec -i \
+		--network=host \
+		mysql:${MYSQL_VERSION} \
+		/bin/bash -c "mysql -h localhost -u sezzle -D sezzle --protocol=tcp -p${MYSQL_PASSWORD} < $1"
 }
 
 ##################
