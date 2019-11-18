@@ -40,9 +40,13 @@ if [ ${PLATFORM} == "Mac" ]; then
 	#For compilers to find gettext you may need to set:
 	export LDFLAGS="-L/usr/local/opt/gettext/lib"
 	export CPPFLAGS="-I/usr/local/opt/gettext/include"
-
-
+	export PATH="/usr/local/opt/mysql@5.6/bin:$PATH"
+ 
+	if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
+		source "/usr/local/etc/profile.d/bash_completion.sh"
+	fi
 fi
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth

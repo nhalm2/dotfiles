@@ -197,18 +197,6 @@ function get_claim_from_cfid()
 
 function start_sezzle_db()
 {
-	docker run -d -p 3306:3306 \
-		-e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
-		-e MYSQL_ROOT_HOST='%' \
-		-e MYSQL_USER=sezzle \
-		-e MYSQL_DATABASE=sezzle \
-		-e MYSQL_PASSWORD=Testing123 \
-		--name=mysql-2 \
-		mysql:${MYSQL_VERSION}
-}
-
-function start_sezzle_db2()
-{
 	local mount_dir=$HOME/mysql_mnt
 
 	if [ ! -d $mount_dir ]; then
@@ -242,18 +230,10 @@ function mysql_s() {
 		mysql -u sezzle -D sezzle --protocol=tcp -p${MYSQL_PASSWORD}
 }
 
-function mysql_s2() {
-	docker run --rm \
-		-it \
-		--network=host \
-		mysql:${MYSQL_VERSION} \
-		mysql -u sezzle -D sezzle -P 3307  --protocol=tcp -p${MYSQL_PASSWORD}
-}
-
 function mysql_dump() {
 	local this_host=${MYSQL_HOST:=localhost}
 	local this_username=${MYSQL_USER:=sezzle}
-	local args="--lock-tables=false $@"
+	# local args="--lock-tables=false $@"
 
 	echo ${this_host}
 	echo ${this_username}
@@ -263,10 +243,11 @@ function mysql_dump() {
 		--network=host \
 		-v $(pwd):/dump \
 		mysql:${MYSQL_VERSION} \
-		/bin/bash -c "mysqldump -h${this_host} -u ${this_username} --protocol=tcp -p${MYSQL_PASSWORD} ${args} > /dump/dump_out.sql"
+		/bin/bash -c "mysqldump -h${this_host} -u ${this_username} --protocol=tcp -p${MYSQL_PASSWORD} -T --fields-enclosed-by=\" --lock-tables=false $@ > /dump/dump_out.sql"
+		# /bin/bash -c "mysqldump -h${this_host} -u ${this_username} --protocol=tcp -p${MYSQL_PASSWORD} ${args} > /dump/dump_out.sql"
 }
 
-function mysql_retore() {
+function mysql_restore() {
 	docker exec -i \
 		--network=host \
 		mysql:${MYSQL_VERSION} \
