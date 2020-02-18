@@ -1,3 +1,6 @@
+[url "ssh://git@sez:"]
+	insteadOf = https://gitlab.sezzle.com
+
 [alias]
 	# reword the last commit
 	amend = commit -a --amend
@@ -49,10 +52,24 @@
 		&& git merge ${1-dev}; \
 		}; f"
 
+	pof = "!f() { \
+		git fetch \
+		&& git po; \
+		}; f"
+
 	po = "!f() { \
 		CURRENT=$(git bn) \
 		&& git pull origin ${CURRENT}; \
 		}; f"
 
+	upstage = "!f() { \
+		git fetch \
+		&& git co staging \
+		&& git po; \
+		}; f"
+
 	publish = "!git push -u origin $(git bn)"
 
+[user]
+	name = Nick Halm
+	email = nick.halm@sezzle.com

@@ -25,11 +25,11 @@ function _get_platform()
 	echo ${machine}
 }
 
+
 PLATFORM=$(_get_platform)
 GOPATH=$HOME/go
-
+export GOPATH=$GOPATH
 export PATH=$PATH:$GOPATH/bin
-echo $GOPATH
 if [ ! -d $GOPATH ]; then
 	echo "ADFAS"
 	mkdir -p $GOPATH/src
@@ -120,6 +120,9 @@ esac
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
+    	
+elif [ ${PLATFORM} == "Mac" ]; then
+    alias ls='ls -G'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
 
@@ -127,6 +130,7 @@ if [ -x /usr/bin/dircolors ]; then
     #alias fgrep='fgrep --color=auto'
     #alias egrep='egrep --color=auto'
 fi
+
 
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'

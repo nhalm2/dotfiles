@@ -2,3 +2,4 @@
 
 
 [ -r ${HOME}/.bashrc ] && source ${HOME}/.bashrc
+export GOPRIVATE=gitlab.sezzle.com

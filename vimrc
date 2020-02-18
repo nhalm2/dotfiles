@@ -35,8 +35,17 @@ Plug 'lifepillar/pgsql.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'slashmili/alchemist.vim'
 Plug 'mhinz/vim-mix-format'
+Plug 'dense-analysis/ale'
 
 call plug#end()
+
+
+" Fix the clipboard
+if system('uname -s') == "Darwin\n"
+  set clipboard=unnamed "OSX
+else
+  set clipboard=unnamedplus "Linux
+endif
 
 " runtime ~/.vim/bundle/vim-pathogen/autoload/pathogen.vim
 
@@ -101,7 +110,7 @@ autocmd VimEnter * call AirlineInit()
 """" git-gutter config
 
 "I don't really want this on all the time, but I like it in the airline
-"let g:gitgutter_enabled = 0
+let g:gitgutter_enabled = 0
 
 """"
 
@@ -112,6 +121,8 @@ map <C-m> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
 autocmd FileType go nmap <leader>r <Plug>(go-run)
 autocmd FileType go nmap <leader>t  <Plug>(go-test)
+" let g:go_auto_sameids = 1
+let g:go_auto_type_info = 1
 
 " run :GoBuild or :GoTestCompile based on the go file
 function! s:build_go_files()
@@ -151,3 +162,13 @@ let g:mix_format_on_save = 1
 """
 """SA-791 - disable warning
 let g:go_version_warning = 0
+
+""""
+"""" ALE
+let g:ale_linters = {
+\	'javascript': ['eslint'],
+\	'go': ['gopls'],
+\}
+let g:airline#extensions#ale#enabled = 1
+"let g:ale_completion_enabled = 1
+set completeopt=menu,menuone,preview,noselect,noinsert

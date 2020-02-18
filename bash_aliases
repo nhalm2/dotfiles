@@ -203,7 +203,7 @@ function start_sezzle_db()
 		mkdir $mount_dir
 	fi
 
-	cmd='echo "CREATE DATABASE IF NOT EXISTS sezzle; CREATE DATABASE IF NOT EXISTS product_events; GRANT ALL ON \`product_events\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`sezzle\`.* TO '\''sezzle'\''@'\''%'\'';" > /docker-entrypoint-initdb.d/init.sql; /usr/local/bin/docker-entrypoint.sh mysqld'
+	cmd='echo "CREATE DATABASE IF NOT EXISTS sezzle; CREATE DATABASE IF NOT EXISTS sezzle_card; CREATE DATABASE IF NOT EXISTS product_events; GRANT ALL ON \`product_events\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`sezzle_card\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`sezzle\`.* TO '\''sezzle'\''@'\''%'\'';" > /docker-entrypoint-initdb.d/init.sql; /usr/local/bin/docker-entrypoint.sh mysqld'
 
 	docker run -d -p 3306:3306 \
 		-e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
