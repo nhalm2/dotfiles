@@ -113,7 +113,9 @@ function _mac() {
 	brew install openssh
 	brew install grep
 	brew install golang
-	brew cask install sequel-pro
+	brew cask install adoptopenjdk13
+	brew cask install dbeaver-community
+	brew cask install postman
 
 	_install_vs_code_brew
 	_install_docker_brew
