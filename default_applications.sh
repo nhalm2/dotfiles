@@ -31,7 +31,7 @@ function _install_brew() {
 	which -s brew
 	if [[ $? != 0 ]]; then
 		echo "installing brew"
-		/usr/bin/ruby -e "$(curl -fssl https://raw.githubusercontent.com/homebrew/install/master/install)"
+		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 	else
 		brew update
 	fi
@@ -112,7 +112,17 @@ function _mac() {
 	brew install openssh
 	brew install grep
 	brew install golang
-	brew cask install adoptopenjdk google-chrome dbeaver-community postman slack iterm2 zoom spotify 1poassword dialpad
+	brew cask install adoptopenjdk \
+		google-chrome \
+		dbeaver-community \
+		postman \
+		slack \
+		iterm2 \
+		zoom \
+		spotify \
+		1password \
+		dialpad \
+		openvpn-connect
 
 
 	_install_vs_code_brew
