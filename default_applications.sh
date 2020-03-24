@@ -95,7 +95,6 @@ function _mac() {
 	brew install neovim
 	brew install git
 	brew install ack
-	brew install git
 	brew install git-lfs
 	brew install gs
 	brew install lua
@@ -113,9 +112,8 @@ function _mac() {
 	brew install openssh
 	brew install grep
 	brew install golang
-	brew cask install adoptopenjdk13
-	brew cask install dbeaver-community
-	brew cask install postman
+	brew cask install adoptopenjdk google-chrome dbeaver-community postman slack iterm2 zoom spotify 1poassword dialpad
+
 
 	_install_vs_code_brew
 	_install_docker_brew
