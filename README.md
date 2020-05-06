@@ -1,5 +1,11 @@
 # dotfiles
 
+## Checkout
+
+```
+git clone --recursive ....
+```
+
 ## Add a new plugin
 
 All the plugins are git submodules.  To add a new one run the command:
