@@ -6,11 +6,10 @@
 git clone --recursive ....
 ```
 
-## Add a new plugin
-
-All the plugins are git submodules.  To add a new one run the command:
+## Install
 ```
-git submodule add https://github.com/<some_name> vim/bundle/<some_name>
+cd ~/
+./dotfiles/initial_install.sh
 ```
 
 ## Get latest changes
