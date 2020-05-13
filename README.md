@@ -3,7 +3,7 @@
 ## Checkout
 
 ```
-git clone --recursive ....
+git clone --recursive https://github.com/nhalm2/dotfiles.git
 ```
 
 ## Install
