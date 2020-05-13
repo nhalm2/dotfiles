@@ -9,7 +9,7 @@ git clone --recursive ....
 ## Install
 ```
 cd ~/
-./dotfiles/initial_install.sh
+./dotfiles/initial_setup.sh
 ```
 
 ## Get latest changes
