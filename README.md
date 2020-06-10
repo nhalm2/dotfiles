@@ -1,10 +1,15 @@
 # dotfiles
 
-## Add a new plugin
+## Checkout
 
-All the plugins are git submodules.  To add a new one run the command:
 ```
-git submodule add https://github.com/<some_name> vim/bundle/<some_name>
+git clone --recursive https://github.com/nhalm2/dotfiles.git
+```
+
+## Install
+```
+cd ~/
+./dotfiles/initial_setup.sh
 ```
 
 ## Get latest changes
