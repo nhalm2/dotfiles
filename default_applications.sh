@@ -54,6 +54,7 @@ function _install_vs_code_brew() {
 	code --install-extension neilding.language-liquid
 	code --install-extension william-voyek.vscode-nginx
 	code --install-extension ms-azuretools.vscode-docker
+	code --install-extension jdinhlife.gruvbox 
 }
 
 function _install_docker_brew() {
@@ -122,7 +123,9 @@ function _mac() {
 		spotify \
 		1password \
 		dialpad \
-		openvpn-connect
+		openvpn-connect \
+		ngrok \
+		adobe-acrobat-reader
 
 
 	_install_vs_code_brew

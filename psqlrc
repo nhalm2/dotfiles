@@ -38,7 +38,7 @@
 \encoding unicode
 
 \set VERBOSITY verbose
-\set HISTFILE ~/.psql_history- :DBNAME
+\set HISTFILE ~/.psql_history/history- :DBNAME
 \set HISTCONTROL ignoredups
 \set COMP_KEYWORD_CASE upper
 

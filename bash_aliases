@@ -197,25 +197,26 @@ function get_claim_from_cfid()
 
 function start_sezzle_db()
 {
-	local mount_dir=$HOME/mysql_mnt
+	local mount_dir=$HOME/mysqlmnt
 
 	if [ ! -d $mount_dir ]; then
 		mkdir $mount_dir
 	fi
 
-	cmd='echo "CREATE DATABASE IF NOT EXISTS sezzle; CREATE DATABASE IF NOT EXISTS sezzle_card; CREATE DATABASE IF NOT EXISTS product_events; GRANT ALL ON \`product_events\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`sezzle_card\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`sezzle\`.* TO '\''sezzle'\''@'\''%'\'';" > /docker-entrypoint-initdb.d/init.sql; /usr/local/bin/docker-entrypoint.sh mysqld'
+	cmd='echo "CREATE DATABASE IF NOT EXISTS card; CREATE DATABASE IF NOT EXISTS marqeta; CREATE DATABASE IF NOT EXISTS nacha; CREATE DATABASE IF NOT EXISTS test; CREATE DATABASE IF NOT EXISTS vault; CREATE DATABASE IF NOT EXISTS sezzle; CREATE DATABASE IF NOT EXISTS sezzle_card; CREATE DATABASE IF NOT EXISTS product_events_test; CREATE DATABASE IF NOT EXISTS product_events; CREATE DATABASE IF NOT EXISTS bank_provider; GRANT ALL ON \`card\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`marqeta\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`nacha\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`product_events_test\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`test\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`product_events\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`sezzle_card\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`sezzle\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`bank_provider\`.* TO '\''sezzle'\''@'\''%'\''; GRANT ALL ON \`vault\`.* TO '\''sezzle'\''@'\''%'\''; " > /docker-entrypoint-initdb.d/init.sql; /usr/local/bin/docker-entrypoint.sh mysqld'
 
 	docker run -d -p 3306:3306 \
 		-e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
 		-e MYSQL_ROOT_HOST='%' \
 		-e MYSQL_USER=sezzle \
 		-e MYSQL_PASSWORD=Testing123 \
-		--mount type=bind,source="${mount_dir}",target=/var/lib/mysql:,consistency=delegated \
+		--mount 'type=volume,volume-driver=local,volume-opt=device=:'${mount_dir}',dst=/app:,volume-opt=type=nfs,"volume-opt=o=addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3"' \
 		--name=mysql-sez \
 		mysql:${MYSQL_VERSION} \
 		/bin/sh -c "${cmd}"
 }
 
+		# --mount 'type=volume,volume-driver=local,volume-opt=device=:/System/Volumes/Data/Users/nhalm/mysqlmnt,dst=/app:,volume-opt=type=nfs,"volume-opt=o=addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3"' \
 function restart_sezzle_db()
 {
 	docker rm -fv mysql-sez
@@ -310,4 +311,61 @@ function get_platform()
 	    *)          machine="UNKNOWN:${unameOut}"
 	esac
 	echo ${machine}
+}
+
+#########
+#       #
+#  AWS  #
+#       #
+#########
+
+function aws_mfa(){
+	unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+	local token="$1"
+
+	echo -n "MFA Token: "
+	read token
+
+	local result=$(aws sts get-session-token --serial-number arn:aws:iam::$sn:mfa/$AWS_USERNAME --token-code "$token")
+	export AWS_ACCESS_KEY_ID=$(echo "$result" | jq -r '.Credentials.AccessKeyId')
+	export AWS_SECRET_ACCESS_KEY=$(echo "$result" | jq -r '.Credentials.SecretAccessKey')
+	export AWS_SESSION_TOKEN=$(echo "$result" | jq -r '.Credentials.SessionToken')
+}
+
+function login_data_lake() {
+	if [[ -z "${AWS_SESSION_TOKEN}" ]]; then
+		aws_mfa
+	fi
+
+	local result=$(aws redshift get-cluster-credentials \
+			--cluster-identifier data-lake \
+			--db-user $AWS_USERNAME \
+			--db-name dev \
+			--duration-seconds 3600 \
+			--auto-create \
+			--db-groups payments analysis)
+
+	export PGUSER=$(echo "$result" | jq -r '.DbUser')
+	export PGPASSWORD=$(echo "$result" | jq -r '.DbPassword')
+
+	echo 'You can view your temporary password via `echo $PGPASSWORD`'
+}
+
+function pgcli_rs() {
+	docker run --rm -it \
+		--network=host \
+		-v ${HOME}/.psql_history/:/root/.psql_history/ \
+		-v ${HOME}/.psqlrc:/root/.psqlrc \
+		-e PGUSER \
+		-e PGPASSWORD \
+		postgres:alpine psql dev -h data-lake.sezzle.internal -p 5439
+}
+
+
+function golangci_lint() {
+	docker run --rm \
+		-v $(pwd):/app \
+		-v ${GOPATH}/pkg/mod:/go/pkg/mod \
+		-w /app \
+		golangci/golangci-lint:latest-alpine golangci-lint run -v
 }

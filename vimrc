@@ -25,6 +25,7 @@ Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-unimpaired'
 Plug 'airblade/vim-gitgutter'
 Plug 'powerline/fonts'
 Plug 'avakhov/vim-yaml'
@@ -165,10 +166,26 @@ let g:go_version_warning = 0
 
 """"
 """" ALE
+highlight ALEErrorSign ctermbg 		=NONE ctermfg=red
+highlight ALEWarningSign ctermbg 	=NONE ctermfg=yellow
+
+let g:ale_linters_explicit	= 1
+let g:ale_lint_on_save		= 1
+let g:ale_fix_on_save		= 0
+let g:ale_lint_on_enter		= 1
+
 let g:ale_linters = {
 \	'javascript': ['eslint'],
 \	'go': ['gopls'],
+\	'yaml': ['yamllint'],
 \}
+
+" nmap <silent> [W <Plug>(ale_first)
+" nmap <silent> ]W <Plug>(ale_last)
+" nmap <silent> [w <Plug>(ale_next_wrap)
+" nmap <silent> ]w <Plug>(ale_next_wrap)
+
 let g:airline#extensions#ale#enabled = 1
-"let g:ale_completion_enabled = 1
+
+let g:ale_completion_enabled = 1
 set completeopt=menu,menuone,preview,noselect,noinsert
