@@ -27,20 +27,35 @@ function _get_platform()
 
 
 PLATFORM=$(_get_platform)
+
+# handle setting up Golang
 GOPATH=$HOME/go
 export GOPATH=$GOPATH
 export PATH=$PATH:$GOPATH/bin
+
 if [ ! -d $GOPATH ]; then
-	echo "ADFAS"
 	mkdir -p $GOPATH/src
 	mkdir -p $GOPATH/bin
 fi
 
+export EDITOR='nvim'
+export VISUAL='nvim'
+
+# platform specific setups
 if [ ${PLATFORM} == "Mac" ]; then
 	#For compilers to find gettext you may need to set:
 	export LDFLAGS="-L/usr/local/opt/gettext/lib"
 	export CPPFLAGS="-I/usr/local/opt/gettext/include"
-	export PATH="/usr/local/opt/mysql@5.6/bin:$PATH"
+
+	# if we are originating from a tmux session 
+	# we do not need to rebuild the path.
+	if [ -z "${TMUX+x}" ]; then
+		export PATH="$PATH:/usr/local/opt/mysql@5.6/bin"
+		export PATH="$PATH:/usr/local/opt/libpq/bin"
+		export PATH="$PATH:/usr/local/anaconda3/bin"
+
+		export PATH="$PATH:$HOME/.cargo/bin"
+	fi
  
 	if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
 		source "/usr/local/etc/profile.d/bash_completion.sh"

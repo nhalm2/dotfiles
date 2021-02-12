@@ -41,6 +41,10 @@ function _install_node() {
 	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
 }
 
+function _install_yarn() {
+	npm install -g yarm
+}
+
 function _install_vs_code_brew() {
 	brew cask install visual-studio-code
 	xattr -r -d com.apple.quarantine '/Applications/Visual Studio Code.app'
@@ -135,6 +139,7 @@ function _mac() {
 	brew cleanup	
 
 	_install_node
+	_install_yarn
 }
 
 _setup_platform

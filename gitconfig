@@ -81,8 +81,16 @@
 		&& git po; \
 		}; f"
 
+	upprod = "!f() { \
+		git fetch \
+		&& git co production \
+		&& git po; \
+		}; f"
+
 	publish = "!git push -u origin $(git bn)"
 
 [user]
 	name = Nick Halm
 	email = nick.halm@sezzle.com
+[pull]
+	rebase = false
