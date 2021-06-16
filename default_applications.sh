@@ -38,15 +38,15 @@ function _install_brew() {
 }
 
 function _install_node() {
-	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 }
 
 function _install_yarn() {
-	npm install -g yarm
+	npm install -g yarn
 }
 
 function _install_vs_code_brew() {
-	brew cask install visual-studio-code
+	brew install visual-studio-code
 	xattr -r -d com.apple.quarantine '/Applications/Visual Studio Code.app'
 
 	code --install-extension ms-vscode.go
@@ -62,7 +62,7 @@ function _install_vs_code_brew() {
 }
 
 function _install_docker_brew() {
-	brew cask install docker
+	brew install docker
 	xattr -r -d com.apple.quarantine '/Applications/Docker.app'
 	ln -s /Applications/Docker.app/Contents/Resources/bin/docker /usr/local/bin/
 }
@@ -75,7 +75,7 @@ function _mac() {
 	echo "Upgrading Brew"
 	brew upgrade
 
-
+	brew install openssl@1.1
 	# Install GNU core utilities
 	brew install coreutils
 
@@ -86,8 +86,8 @@ function _mac() {
 	# Install GNU `sed`, overwriting the built-in `sed`.
 	brew install gnu-sed
 	# Install a modern version of Bash.
-	brew install bash
-	brew install bash-completion
+	brew install bash \
+		bash-completion
 
 	# Switch to using brew-installed bash as default shell
 	if ! fgrep -q "${brew_prefix}/bin/bash" /etc/shells; then
@@ -97,27 +97,27 @@ function _mac() {
 
 
 	# Install other useful binaries.
-	brew install neovim
-	brew install git
-	brew install ack
-	brew install git-lfs
-	brew install gs
-	brew install lua
-	brew install lynx
-	brew install p7zip
-	brew install pigz
-	brew install pv
-	brew install rename
-	brew install rlwrap
-	brew install ssh-copy-id
-	brew install tree
-	brew install vbindiff
-	brew install zopfli
-	brew install tmux
-	brew install openssh
-	brew install grep
-	brew install golang
-	brew cask install adoptopenjdk \
+	brew install neovim \
+		git \
+		ack \
+		git-lfs \
+		gs \
+		lua \
+		lynx \
+		p7zip \
+		pigz \
+		pv \
+		rename \
+		rlwrap \
+		ssh-copy-id \
+		tree \
+		vbindiff \
+		zopfli \
+		tmux \
+		openssh \
+		grep \
+		golang \
+		adoptopenjdk \
 		google-chrome \
 		dbeaver-community \
 		postman \
@@ -129,7 +129,8 @@ function _mac() {
 		dialpad \
 		openvpn-connect \
 		ngrok \
-		adobe-acrobat-reader
+		adobe-acrobat-reader \
+		google-drive
 
 
 	_install_vs_code_brew
